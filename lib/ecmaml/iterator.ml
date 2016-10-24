@@ -58,7 +58,5 @@ module Make(Elt : Element) : S with type elt := Elt.elt = struct
     new iterator_obj o
 
   let from_instance instance =
-    match Js.Optdef.to_option (Js.Unsafe.coerce instance)##.next with
-    | None -> failwith "incorrect instance"
-    | Some t -> new iterator_obj t
+    new iterator_obj (Js.Unsafe.coerce instance)
 end

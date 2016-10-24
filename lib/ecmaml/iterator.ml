@@ -7,13 +7,14 @@ type 'a element =
 module type Element = sig
   type elt
   val js_of_elt : elt -> Js.Unsafe.any
-  val elt_of_js : Js.Unsafe.any -> elt
+  val elt_of_js : _ -> elt
 end
 
 module type S = sig
   type elt
   type t = < next : unit -> elt element >
   val create : (unit -> elt element) -> t
+  val from_instance : 'a Js.t -> t
 end
 
 module Make(Elt : Element) : S with type elt := Elt.elt = struct
@@ -57,7 +58,7 @@ module Make(Elt : Element) : S with type elt := Elt.elt = struct
     new iterator_obj o
 
   let from_instance instance =
-    match Js.Optdef.to_option instance##.next with
+    match Js.Optdef.to_option (Js.Unsafe.coerce instance)##.next with
     | None -> failwith "incorrect instance"
     | Some t -> new iterator_obj t
 end

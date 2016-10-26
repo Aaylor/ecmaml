@@ -1,8 +1,10 @@
 
-type 'a element =
+type 'a it_result =
   | Done
   | Return of 'a
   | Yield of 'a
+
+let identity = Obj.magic
 
 module type Element = sig
   type elt
@@ -12,18 +14,18 @@ end
 
 module type S = sig
   type elt
-  type t = < next : unit -> elt element >
-  val create : (unit -> elt element) -> t
+  type t = < next : unit -> elt it_result >
+  val create : (unit -> elt it_result) -> t
   val from_instance : 'a Js.t -> t
 end
 
 module Make(Elt : Element) : S with type elt := Elt.elt = struct
   type instance
   type elt = Elt.elt
-  type t = < next : unit -> elt element; >
+  type t = < next : unit -> elt it_result; >
 
   class iterator_obj (instance : instance Js.t) = object
-    method next () : elt element =
+    method next () =
       let result = Js.Unsafe.fun_call (Js.Unsafe.coerce instance)##.next [||] in
       let done_ = Js.to_bool (Js.Unsafe.get result "done") in
       if done_ then
@@ -58,5 +60,6 @@ module Make(Elt : Element) : S with type elt := Elt.elt = struct
     new iterator_obj o
 
   let from_instance instance =
+    (* TODO: use has_method *)
     new iterator_obj (Js.Unsafe.coerce instance)
 end

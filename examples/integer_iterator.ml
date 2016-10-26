@@ -1,23 +1,22 @@
-
 open Ecmaml.Iterator
 
-module IntElement = struct
-  type elt = int
-  let js_of_elt = Js.Unsafe.inject
-  let elt_of_js i = Obj.magic i
-end
-
-module IntIterator = Make(IntElement)
+module IntIterator =
+  Ecmaml.Iterator.Make(struct
+    type elt = int
+    let js_of_elt = Js.Unsafe.inject
+    let elt_of_js = identity
+  end)
 
 let iterator =
   let x = ref 0 in
-  IntIterator.create
-    (fun () ->
-       if !x < 10 then begin
-         let old_x = !x in
-         incr x;
-         Yield old_x
-       end else Done)
+  let generator () =
+    if !x < 10 then begin
+      let old = !x in
+      incr x;
+      Yield old
+    end else Done
+  in
+  IntIterator.create generator
 
 let print = function
   | Done -> Printf.printf "Done\n"

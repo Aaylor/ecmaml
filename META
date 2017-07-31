@@ -1,5 +1,0 @@
-name="ecmaml"
-version="0.1"
-description="js bindings of some ecma data structures"
-requires="js_of_ocaml,js_of_ocaml.ppx"
-archive(byte) = "ecmaml.cma"

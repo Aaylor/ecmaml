@@ -1,7 +1,0 @@
-S lib
-S lib/ecmaml
-
-B _build/lib
-B _build/lib/ecmaml
-
-PKG js_of_ocaml js_of_ocaml.ppx

@@ -1,0 +1,10 @@
+(jbuild_version 1)
+
+(library
+ ((name ecmaml)
+  (public_name ecmaml)
+  (libraries (js_of_ocaml))
+  (js_of_ocaml ((flags (--pretty))))
+  (modes (byte))
+  (library_flags (-linkall))
+  (preprocess (pps (js_of_ocaml-ppx)))))

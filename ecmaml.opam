@@ -1,0 +1,13 @@
+opam-version: "1.2"
+maintainer: "loic.runarvot@gmail.com"
+authors: ["Loïc Runarvot <loic.runarvot@gmail.com>"]
+homepage: "https://github.com/Aaylor/ecmaml"
+bug-reports: "https://github.com/Aaylor/ecmaml/issues/"
+dev-repo: "https://github.com/Aaylor/ecmaml.git"
+license: "LGPL-3 with OCaml linking exception"
+build: ["jbuilder" "build" "-j" jobs "@install"]
+depends: [
+  "jbuilder" {build}
+  "js_of_ocaml"
+]
+available: [ocaml-version >= "4.03.0"]
